@@ -1,34 +1,30 @@
 pipeline {
     agent any
+    
     stages {
         stage('Build') {
             steps {
-                sh "g++ -o PES1UG20CS274-1 sample.cpp"
-            }
-            post {
-                always {
-                    archiveArtifacts artifacts: 'PES1UG20CS274-1'
-                }
+                sh 'g++ -o PES1UG20CS018_task5 PES1UG20CS018_task5.cpp'
+                build job: 'PES1UG20CS018-1'
             }
         }
+        
         stage('Test') {
             steps {
-                sh "./PES1UG20CS274-1"
+                sh './PES1UG20CS018_task5'
             }
         }
+        
         stage('Deploy') {
             steps {
-                // Add deployment steps here, e.g. uploading to a server
+                echo 'Deployment'
             }
         }
     }
+    
     post {
-        always {
-            script {
-                if (currentBuild.result != 'SUCCESS') {
-                    println('pipeline failed')
-                }
-            }
+        failure {
+            echo 'Pipeline failed'
         }
     }
 }
